@@ -1,0 +1,250 @@
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+Certainly! Testing through Postman is an excellent choice as it provides a user-friendly interface and allows you to save and organize your requests. I'll guide you through setting up and running these tests in Postman.
+
+First, let's set up a collection in Postman:
+
+1. Open Postman and create a new collection called "Blockchain Authentication System".
+2. Set up an environment variable for your base URL (e.g., `baseUrl` = `http://localhost:8080`).
+3. Set up an environment variable for storing tokens (e.g., `aliceToken` and `bobToken`).
+
+Now, let's create requests for each test:
+
+1. User Registration:
+   - Method: POST
+   - URL: {{baseUrl}}/api/users/register
+   - Body (raw JSON):
+     ```json
+     {
+         "username": "alice",
+         "password": "password123"
+     }
+     ```
+   - Create a similar request for Bob's registration.
+
+2. User Login:
+   - Method: POST
+   - URL: {{baseUrl}}/api/users/login
+   - Body (raw JSON):
+     ```json
+     {
+         "username": "alice",
+         "password": "password123"
+     }
+     ```
+   - In the "Tests" tab, add this script to automatically save the token:
+     ```javascript
+     var jsonData = pm.response.json();
+     pm.environment.set("aliceToken", jsonData);
+     ```
+   - Create a similar request for Bob's login, saving to `bobToken`.
+
+3. Blockchain Status:
+   - Method: GET
+   - URL: {{baseUrl}}/api/blockchain/status
+   - Headers: Authorization: Bearer {{aliceToken}}
+
+4. Get Latest Block:
+   - Method: GET
+   - URL: {{baseUrl}}/api/blockchain/latest
+   - Headers: Authorization: Bearer {{aliceToken}}
+
+5. Get Block by Index:
+   - Method: GET
+   - URL: {{baseUrl}}/api/blockchain/block/1
+   - Headers: Authorization: Bearer {{aliceToken}}
+
+6. Get Current Difficulty:
+   - Method: GET
+   - URL: {{baseUrl}}/api/blockchain/difficulty
+   - Headers: Authorization: Bearer {{aliceToken}}
+
+7. Set New Difficulty:
+   - Method: POST
+   - URL: {{baseUrl}}/api/blockchain/difficulty?difficulty=5
+   - Headers: Authorization: Bearer {{aliceToken}}
+
+8# Blockchain-based Authentication System API Documentation
+
+## Base URL
+
+All URLs referenced in the documentation have the following base:
+
+```
+http://localhost:8080/api
+```
+
+## Endpoints
+
+### 1. Register User
+
+Register a new user in the system.
+
+- **URL:** `/users/register`
+- **Method:** `POST`
+- **Auth required:** No
+
+#### Request Body
+
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+#### Success Response
+
+- **Code:** 200 OK
+- **Content:** `User registered successfully`
+
+#### Error Response
+
+- **Code:** 500 Internal Server Error
+- **Content:** `An error occurred during registration: [error message]`
+
+### 2. User Login
+
+Authenticate a user and receive a JWT token.
+
+- **URL:** `/users/login`
+- **Method:** `POST`
+- **Auth required:** No
+
+#### Request Body
+
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+#### Success Response
+
+- **Code:** 200 OK
+- **Content:** `[JWT Token]`
+
+#### Error Response
+
+- **Code:** 401 Unauthorized
+- **Content:** `Invalid username or password`
+
+- **Code:** 500 Internal Server Error
+- **Content:** `An error occurred during login: [error message]`
+
+### 3. Get User Public Key
+
+Retrieve the public key for a given user.
+
+- **URL:** `/users/public-key?username=[username]`
+- **Method:** `GET`
+- **Auth required:** Yes (JWT Token)
+
+#### Success Response
+
+- **Code:** 200 OK
+- **Content:** `[Public Key]`
+
+#### Error Response
+
+- **Code:** 404 Not Found
+- **Content:** `User not found`
+
+### 4. Get Blockchain Status
+
+Retrieve the current status of the blockchain.
+
+- **URL:** `/blockchain/status`
+- **Method:** `GET`
+- **Auth required:** Yes (JWT Token)
+
+#### Success Response
+
+- **Code:** 200 OK
+- **Content:** 
+```json
+{
+  "blockCount": "integer",
+  "lastBlockHash": "string",
+  "difficulty": "integer"
+}
+```
+
+## Authentication
+
+Except for the Register and Login endpoints, all API calls require authentication. 
+
+To authenticate, include the JWT token in the Authorization header:
+
+```
+Authorization: Bearer [JWT Token]
+```
+
+## Error Handling
+
+All endpoints may return the following error responses:
+
+- **Code:** 400 Bad Request
+- **Content:** `[Error message explaining the bad request]`
+
+- **Code:** 401 Unauthorized
+- **Content:** `Authentication token is invalid or expired`
+
+- **Code:** 403 Forbidden
+- **Content:** `You do not have permission to access this resource`
+
+- **Code:** 500 Internal Server Error
+- **Content:** `An unexpected error occurred. Please try again later.`
+10. Test Invalid Login:
+    - Method: POST
+    - URL: {{baseUrl}}/api/users/login
+    - Body (raw JSON):
+      ```json
+      {
+          "username": "alice",
+          "password": "wrongpassword"
+      }
+      ```
+
+11. Test Duplicate Registration:
+    - Method: POST
+    - URL: {{baseUrl}}/api/users/register
+    - Body (raw JSON):
+      ```json
+      {
+          "username": "alice",
+          "password": "newpassword"
+      }
+      ```
+
+12. Test Unauthorized Access:
+    - Method: GET
+    - URL: {{baseUrl}}/api/blockchain/status
+    - (Don't include any Authorization header)
+
+Testing Process:
+1. Start your Spring Boot application.
+2. In Postman, run the registration requests for Alice and Bob.
+3. Run the login requests for both users. Verify that tokens are saved in the environment variables.
+4. Run through each of the other requests, checking the responses:
+   - For successful requests, you should get a 200 OK status and the expected data.
+   - For error cases (invalid login, duplicate registration, unauthorized access), verify that you get appropriate error messages and status codes (e.g., 400 Bad Request, 401 Unauthorized).
+
+5. Pay special attention to the blockchain-related requests. Verify that:
+   - The blockchain status shows the correct number of blocks.
+   - The latest block matches what you expect.
+   - You can retrieve a specific block by index.
+   - You can get and set the mining difficulty.
+
+6. For the credential storage and retrieval:
+   - Verify that you can store a credential.
+   - Check that you can retrieve the stored credential and that the password is not returned in plain text.
+
+7. Test the error cases:
+   - Verify that an invalid login attempt is rejected.
+   - Confirm that you can't register a duplicate username.
+   - Check that accessing a protected endpoint without a token fails.
+
+As you go through these tests, make notes of any unexpected behaviors or errors. If you encounter any issues or have questions about the responses, please let me know, and I'll be happy to help you troubleshoot or explain the results.

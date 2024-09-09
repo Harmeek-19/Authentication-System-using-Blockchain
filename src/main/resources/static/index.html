@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Manager</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Add your custom styles here */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #0059b3;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 32px;
+      margin: 0;
+    }
+
+    nav {
+      background-color: #f5f5f5;
+      padding: 10px;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    li {
+      margin: 0 10px;
+    }
+
+    li a {
+      text-decoration: none;
+      color: #333;
+      padding: 5px;
+      border-bottom: 2px solid transparent;
+      transition: border-bottom 0.3s ease;
+    }
+
+    li a:hover {
+      border-bottom: 2px solid #0059b3;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    #content-authenticated {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    button[type="submit"] {
+      background-color: #0059b3;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: #f5f5f5;
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Password Manager</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/user.html">User Dashboard</a></li>
+      <li><a href="#" id="login-link">Login</a></li>
+      <li><a href="#" id="register-link">Register</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div id="content-unauthenticated">
+      <p>Welcome to the Password Manager application!</p>
+      <p>Please <a href="#" id="login-link">log in</a> or <a href="#" id="register-link">register</a> to access the user dashboard.</p>
+    </div>
+
+    <div id="content-authenticated" style="display: none;">
+      <!-- Content for authenticated users goes here -->
+      <p>Hello, authenticated user!</p>
+    </div>
+
+    <div id="registration-form" style="display: none;">
+      <h2>Register</h2>
+      <form id="register-form">
+        <label for="newUsername">Username:</label>
+        <input type="text" id="newUsername" required>
+        <label for="newPassword">Password:</label>
+        <input type="password" id="newPassword" required>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+    <div id="login-form" style="display: none;">
+      <h2>Login</h2>
+      <form id="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Password Manager</p>
+  </footer>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/authentication.js"></script>
+</body>
+
+</html>
